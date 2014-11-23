@@ -69,6 +69,14 @@ h1 {
 	width: 400px;
 	height: 400px;
 }
+.heading {
+	margin: 0 auto;
+	background-color: ;
+	width: 100%;
+	font-size: 160%;
+	
+}
+
 .logo img {
 	margin: 0 auto;
 	width: 400px;
@@ -98,6 +106,12 @@ Main Content
 	transition: 2s;
 	border-radius: 4px;
 }
+.my-media {
+	width: 60px;
+	height: 40px;
+	visibility: hidden;
+	
+}
 .my-sounds {
 	cursor: pointer;
 }
@@ -114,6 +128,29 @@ Main Content
 	height: 700px;
 	float: right;
 	margin: 0 0 20px 0;
+	-webkit-transition: all 1s ease-in;
+  -moz-transition: all 1s ease-in;
+  -o-transition: all 1s ease-in;
+  transition: all 1s ease-in;
+}
+.user-account-content h3{
+	text-align: center;
+	color: #FFF;
+	font-size: 30px;
+	font-family: verdana;
+}
+.social-heading {
+	text-align: center;
+	color: #FFF;
+}
+.start-up{
+	margin: 60px auto 0 auto;
+	width: 400px;
+	height: 400px;
+}
+.start-up img{
+	width: 400px;
+	height: 400px;
 }
 .user-panel-box {
 	width: 100%;
@@ -142,7 +179,7 @@ Main Content
 	
 	padding: 0;
 	width: 100%;
-	height: 100%;
+	height: 83px;
 	
 }
 
