@@ -1,0 +1,102 @@
+<!--after login page style-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sound App Project</title>
+		<meta charset="utf-8">
+		<meta name="Dark Sky Blue" content="Sound App Project">
+		<meta name="keywords" content="HTML,CSS,XML,JavaScript">
+		<link rel="stylesheet" type="text/css" href="style/style.css">
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/searchBox.js"></script>
+		<script src="js/userAccHover.js"></script>
+		
+	</head>
+	<body>
+		<div id="wrapper"><!--wrapper-->
+			<header class="main-header"><!--main header content-->
+				<div class="sub-header"><!--sub header social-->
+					<div class="title">
+						<a href=""><h1>SS</h1></a>
+					</div>
+					
+					<div class="social"> 
+						<img src="img/social/Facebook.png" title="Facebook"/>
+						<img src="img/social/Twitter.png" title="Twitter"/>
+						<img src="img/social/GitHub.png" title="GitHub"/>
+					</div>
+					<div class="user-nav">
+						<img src="img/user.png" title="User"/>
+						<img src="img/notifications.png" title="Notifications"/>
+						<img src="img/settings.png" title="Settings"/>
+					</div>
+				</div><!--sub header social-->
+				
+				<div class="slider-wrapper"><!--slider-->
+					<div class="logo">
+						<img src="img/logo.png" title="Play"/>
+					</div>
+				</div><!--slider-->
+			</header><!--main header content-->
+			
+			<div id="main-content-wrapper"><!--main content-->
+				<div class="searchbox">
+					<input class="searchbox-input">
+					
+					</input>
+				</div>
+				<div class="user-account-aside">
+					<!--TODO on login fetch user info-->
+					<div class="user-panel"><!--On login should fetch Username from DB-->
+						<div class="user-panel-box">
+							<h5>Profile</h5>
+							<div class="user-panel-box-img">
+								<img src="img/my-acc.png" />
+							</div>
+							
+						</div>
+						<div class="user-panel-box" id="my-sounds">
+							<h5>My Sounds</h5><!--TODO on click fetch data from DB to main content-->
+							<div class="user-panel-box-img">
+								<img src="img/my-sounds.png" />
+							</div>
+							
+						</div>
+						
+						<div class="user-panel-box">
+							<h5>Upload Sounds</h5>
+							<div class="user-panel-box-img">
+								<img src="img/upload.png" />
+							</div>
+							
+						</div>
+						
+						<div class="user-panel-box">
+							<h5>Download Sounds</h5>
+							<div class="user-panel-box-img">
+								<img src="img/download.png" />
+							</div>
+							
+						</div>
+						
+						<div class="user-panel-box">
+							<h5>Manage Sounds</h5>
+							<div class="user-panel-box-img">
+								<img src="img/manage.png" />
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="user-account-content">
+				
+				</div>
+			</div><!--main content-->
+			
+			<div id="footer"><!--footer-->
+			
+			</div><!--footer-->
+		</div><!--wrapper-->
+	</body>
+</html>
