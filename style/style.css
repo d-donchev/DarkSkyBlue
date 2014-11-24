@@ -110,21 +110,21 @@ Main Content
 	width: 60px;
 	height: 40px;
 	visibility: hidden;
-	
+	cursor: pointer;
 }
 .my-sounds {
 	cursor: pointer;
 }
 .user-account-aside  {
 	background-color:#;
-	width: 25%;
+	width: 10%;
 	height: 700px;
 	float: left;
 	margin: 0 2% 0 0;
 }
 .user-account-content {
 	background-color: #D3C3CB;
-	width: 73%;
+	width: 88%;
 	height: 700px;
 	float: right;
 	margin: 0 0 20px 0;
@@ -172,7 +172,7 @@ Main Content
 .user-panel-box-img {
 	
 	margin: 0 auto;
-	width: 30%;
+	width: 80%;
 	background-color: ;
 }
 .user-panel-box-img img{
