@@ -7,7 +7,7 @@ $( document ).ready(function() {
 	});
 	$(".my-media").click(function () {
 		$(this).css('visibility', 'hidden');
-		$(".user-account-content").css('width', '73%');
+		$(".user-account-content").css('width', '88%');
 		$(".user-account-aside").fadeIn( 400 );
 		$(".social-heading").remove();
 	});
