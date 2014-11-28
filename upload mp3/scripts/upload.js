@@ -65,6 +65,7 @@
 		}
 
 		function uploadSong() {
+			$('#prog').progressbar({ value: 0 });
 			var songGenre = $('#songGenre option:selected').text();
 			// This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
 			var songName = file.name.match(/(.+).\./)[1];
@@ -89,7 +90,21 @@
 				error: function(data) {
 					var obj = jQuery.parseJSON(data);
 					alert(obj.error);
-				}
+				},
+				progress: function(e) {
+                        if(e.lengthComputable) {
+                            var pct = (e.loaded / e.total) * 100;
+
+                            $('#prog')
+                                .progressbar('option', 'value', pct)
+                                .children('.ui-progressbar-value')
+                                .html(pct.toPrecision(3) + '%')
+                                .css('display', 'block');
+                        } else {
+                            console.warn('Content Length not reported!');
+                        }
+                    }
+
 			});
 
 		}

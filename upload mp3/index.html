@@ -5,6 +5,9 @@
 	<title>Upload mp3</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="scripts/upload.js" type="text/javascript"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
+        
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,7 +19,34 @@
     <input type="file" name="fileselect" id="fileselect"></input>
     <button id='btn-upload'>Choose File</button>
     <input id="uploadbutton" type="button" value="Upload to Parse"/>
-	
+	 <div id="prog"></div>
+
+	 <script type="text/javascript">
+	 (function($, window, undefined) {
+    //is onprogress supported by browser?
+    var hasOnProgress = ("onprogress" in $.ajaxSettings.xhr());
+
+    //If not supported, do nothing
+    if (!hasOnProgress) {
+        return;
+    }
+    
+    //patch ajax settings to call a progress callback
+    var oldXHR = $.ajaxSettings.xhr;
+    $.ajaxSettings.xhr = function() {
+        var xhr = oldXHR();
+        if(xhr instanceof window.XMLHttpRequest) {
+            xhr.addEventListener('progress', this.progress, false);
+        }
+        
+        if(xhr.upload) {
+            xhr.upload.addEventListener('progress', this.progress, false);
+        }
+        
+        return xhr;
+    };
+		})(jQuery, window);
+	 </script>
 </body>
 
 </html>
