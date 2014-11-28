@@ -9,6 +9,7 @@
 				case 'wav':
 				case 'ogg':
 					$('#uploadbutton').removeAttr('disabled');
+					$('#uploadbutton').click(uploadSong);
 					break;
 				default:
 					$('#uploadbutton').attr('disabled', "disabled");
@@ -53,7 +54,7 @@
 			for (var s in data.results) {
 				var songObj = data.results[s]['song'];
 				var song = songObj.url;
-				var songName = songObj.name;
+				var songName = data.results[s].songName;
 				var div = $('<div>').addClass("dipslayedSongs");
 				var link = $('<a>').attr("href", song);
 				link.text(songName);
@@ -66,7 +67,8 @@
 		function uploadSong() {
 			var songGenre = $('#songGenre option:selected').text();
 			// This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-			var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+			var songName = file.name.match(/(.+).\./)[1];
+			var serverUrl = 'https://api.parse.com/1/files/' + songName;
 
 			$.ajax({
 				type: "POST",
@@ -82,7 +84,7 @@
 				success: function(data) {
 
 					alert("File available at: " + data.url);
-					writeSongToSongsStorage(data, songGenre);
+					writeSongToSongsStorage(data, songGenre,songName);
 				},
 				error: function(data) {
 					var obj = jQuery.parseJSON(data);
@@ -92,10 +94,8 @@
 
 		}
 
-		function writeSongToSongsStorage(data, songGenre) {
+		function writeSongToSongsStorage(data, songGenre,songName) {
 			var songUrl = data.url;
-			var songName = data.name;
-
 			$.ajax({
 				method: 'POST',
 				headers: {
@@ -108,7 +108,7 @@
 					"songGenre": songGenre,
 					"song": {
 						"__type": "File",
-						"name": songName,
+						"name": data.name,
 						"url": songUrl
 					}
 				}),
