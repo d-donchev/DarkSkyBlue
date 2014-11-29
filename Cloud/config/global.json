@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Social Sound": {
+            "applicationId": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS", 
+            "masterKey": "ymbyUxlC9smIS2c5jfYQFjC9tThumZYWHPlBq9nE"
+        }, 
+        "_default": {
+            "link": "Social Sound"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.2"
+    }
+}
