@@ -94,6 +94,7 @@
 					localStorage.setObject('user', user);
 					hiddenLoginForm();
 					getUserInfo();
+					
 				}
 				
 			function getUserInfo(){
@@ -101,8 +102,10 @@
 				if((user=localStorage.getObject('user'))!== null){
 					$('.login').show();
 					$('.login h1').html('Welcome '+user.username+" <div id='logout'>LogOut</div>");
-					$("#logout").click(logOutUsers);
 					
+					$("#logout").click(logOutUsers);
+					//Should redirect to our index page
+					window.location.replace("http://stackoverflow.com");
 				}
 			}
 			
@@ -120,6 +123,7 @@
 							success:function() {
 								hiddenLoginForm();
 								getUserInfo();
+								
 							},
 							error: showError	
 						});
