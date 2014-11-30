@@ -154,7 +154,6 @@
 				headers: {
 					"X-Parse-Application-Id": PARSE_APP_ID,
 					"X-Parse-REST-API-Key": PARSE_API_KEY
-						// "X-Parse-Master-Key" : "ymbyUxlC9smIS2c5jfYQFjC9tThumZYWHPlBq9nE"
 				},
 				url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
 				data: JSON.stringify({
@@ -163,9 +162,9 @@
 
 				contentType: "application/json",
 				success: function(data) {
-					deleteFileSuccessfully();
 					callParseCloudCodeForDelete();
 					deleteSongObject(song);
+					deleteFileSuccessfully();
 					
 				},
 
@@ -194,7 +193,6 @@
 		}
 		function callParseCloudCodeForDelete () {
 			$.ajax({
-
 				method: "POST",
 				headers: {
 					"X-Parse-Application-Id": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS",
