@@ -31,7 +31,6 @@
                 files = e.target.files || e.dataTransfer.files;
                 // Our file var now holds the selected file
                 file = files[0];
-
             });
         });
 
@@ -147,6 +146,7 @@
             $.ajax({
                 method: 'PUT',
                 url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
+                headers:headers,
                 data: JSON.stringify({
                     "forDelete": true
                 }),
@@ -156,7 +156,6 @@
                     callParseCloudCodeForDelete();
                     deleteSongObject(song);
                     deleteFileSuccessfully();
-
                 },
 
                 error: songsLoadedError
@@ -186,10 +185,7 @@
         function callParseCloudCodeForDelete() {
             $.ajax({
                 method: "POST",
-                headers: {
-                    "X-Parse-Application-Id": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS",
-                    "X-Parse-REST-API-Key": "hSiN54s0we68AaQaQJCauFXNfE4w8J3nPppcRyPE"
-                },
+                headers: headers,
                 url: "https://api.parse.com/1/functions/delete",
                 success: function (data) {
                     console.log(data);
@@ -206,10 +202,7 @@
             $.ajax({
 
                 method: "DELETE",
-                headers: {
-                    "X-Parse-Application-Id": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS",
-                    "X-Parse-REST-API-Key": "hSiN54s0we68AaQaQJCauFXNfE4w8J3nPppcRyPE"
-                },
+                headers: headers,
                 url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
                 success: function (data) {
                     console.log(data);
