@@ -90,6 +90,7 @@ Main Content
 #main-content-wrapper{
 	width: 97%;
 	margin: 20px auto 0 auto;
+	
 }
 .searchbox {
 	width: 100%;
@@ -306,25 +307,39 @@ HEADER
 
 .login-form .header {
 	padding: 40px 30px 30px 30px;
+	
 }
 
-.login-form .header h1 {
+.login-form  h1 {
 	font-family: 'Bree Serif', serif;
 	font-weight: 300;
-	font-size: 28px;
+	font-size: 20px;
+	width: 100%;
+	float: left;
 	line-height:34px;
-	color: #414848;
+	background-color: ;
 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
 	margin-bottom: 10px;
+	
 }
 
-.login-form .header span {
+.login-form span {
 	font-size: 11px;
 	line-height: 16px;
 	color: #678889;
 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
 }
-
+#logout {
+	
+	color: #000;
+	visibility: hidden;
+	
+	cursor: pointer;
+}
+.login-form  h1:hover #logout {
+	visibility: visible;
+	
+}
 /*******************
 CONTENT
 *******************/
