@@ -19,9 +19,14 @@ $(function() {
 			$("#submit_create").click(createUsers);
 			
 			
-			function createUsers(){
-				var username= $("#username").val();
-				var password= $("#password").val();
+			function createUsers() {
+			    $('.registerForm').css('display', 'block');
+			    $('.register').first().css('display', 'none');
+                // username, password, againPass, firstName, lastName, email
+
+				var userName= $("#registerUserName").val();
+				var password = $("#registerPassword").val();
+				var password2 = $("#againPassword").val();
 				
 				$.ajax({
 					method: "POST",
@@ -31,8 +36,10 @@ $(function() {
 					},
 					url:"https://api.parse.com/1/users",
 					data: JSON.stringify(
-						{"username":username,
-						 "password":password}),
+						{
+						    "username": userName,
+						    "password": password
+						}),
 					contentType: "application/json",
 					success:loginSuccess,
 					error: showError
@@ -69,6 +76,7 @@ $(function() {
 				$('.content').hide();
 				$('.footer').hide();
 			}
+
 			function showLoginForm()
 			{
 				$('.header').show();
