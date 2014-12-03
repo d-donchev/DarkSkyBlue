@@ -37,7 +37,7 @@ $(function() {
 			                "X-Parse-Application-Id": PARSE_APP_ID,
 			                "X-Parse-REST-API-Key": PARSE_REST_API_KEY
 			            },
-			            url: "https://api.parse.com/1/users",
+			            url: "https://api.parse.com/1/classes/_User",
 			            data: JSON.stringify(
                             {
                                 "username": userName,
@@ -50,7 +50,7 @@ $(function() {
 			            contentType: "application/json",
 			            success: loginSuccess,
 			            error: showError
-			        })
+			        });
 			    });
 			}
 			
