@@ -23,28 +23,35 @@ $(function() {
 			    $('.registerForm').css('display', 'block');
 			    $('.register').first().css('display', 'none');
                 // username, password, againPass, firstName, lastName, email
+			    $('#registerSubmit').click(function () {
+			        var userName = $("#registerUserName").val();
+			        var password = $("#registerPassword").val();
+			        var password2 = $("#againPassword").val();
+			        var firstName = $("#registerFirstName").val();
+			        var lastName = $("#registerLastName").val();
+			        var email = $("#registerEmail").val();
 
-				var userName= $("#registerUserName").val();
-				var password = $("#registerPassword").val();
-				var password2 = $("#againPassword").val();
-				
-				$.ajax({
-					method: "POST",
-					headers: {
-					"X-Parse-Application-Id": PARSE_APP_ID,
-					"X-Parse-REST-API-Key": PARSE_REST_API_KEY
-					},
-					url:"https://api.parse.com/1/users",
-					data: JSON.stringify(
-						{
-						    "username": userName,
-						    "password": password
-						}),
-					contentType: "application/json",
-					success:loginSuccess,
-					error: showError
-				})
-			
+			        $.ajax({
+			            method: "POST",
+			            headers: {
+			                "X-Parse-Application-Id": PARSE_APP_ID,
+			                "X-Parse-REST-API-Key": PARSE_REST_API_KEY
+			            },
+			            url: "https://api.parse.com/1/users",
+			            data: JSON.stringify(
+                            {
+                                "username": userName,
+                                "password": password,
+                                "firstName": firstName,
+                                "lastName": lastName,
+                                "email": email
+
+                            }),
+			            contentType: "application/json",
+			            success: loginSuccess,
+			            error: showError
+			        })
+			    });
 			}
 			
 			function loginUsers(){
