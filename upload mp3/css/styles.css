@@ -10,11 +10,15 @@
 #uploadButton {
 	disabled: disabled;
 }
-#dw-btn {
+#download-button {
     display: inline-block;
     border: 1px solid;
     background-color: lightgrey;
     text-decoration: none;
     margin: 5px;
     color:black;
+}
+.comment{
+    border: 1px solid;
+    height: 30px;
 }

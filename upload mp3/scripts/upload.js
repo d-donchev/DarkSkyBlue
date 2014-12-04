@@ -56,18 +56,39 @@
                 var song = data.results[s];
                 var songUrl = songObj.url;
                 var songName = data.results[s].songName;
-                var div = $('<div>').addClass("dipslayedSongs");
+                var songContainer = $('<div>').addClass("dipslayedSongs");
                 var link = $('<a>').attr("href", songUrl);
                 var $delete = $('<button>').addClass("delete-btn").text("Delete");
                 $delete.data('song', song);
-                $delete.appendTo(div);
+                $delete.appendTo(songContainer);
                 $delete.click(deleteSong);
-                var download = $('<a id="dw-btn">').attr('href',songUrl).attr('download', songName).text('Download');
-                download.appendTo(div);
+                $('<a id="download-button">').attr('href', songUrl).attr('download', songName).text('Download').appendTo(songContainer);
                 link.text(songName);
-                link.appendTo(div);
-                div.appendTo($('#showSongs'));
+                link.appendTo(songContainer);
+
+                var commentsContainer = $('<div>').addClass('comments');
+                var commentsList = $('<div>').appendTo(commentsContainer);
+                var comments = data.results[s].comments;
+                if (data.results[s].comments) {
+                    showSongComments(comments, commentsList)
+                }
+                $('<button class="submit" id="add-comment">').attr('song-id', song.objectId).text('Add comment').click(function () {
+                    $(this).next().show();
+                    $(this).next().next().show();
+                }).appendTo(commentsContainer);
+                $('<textarea class="submit" id="comment-content">').attr('song-id', song.objectId).appendTo(commentsContainer).hide();
+                $('<button class="submit">').attr('song-id', song.objectId).text('Add').appendTo(commentsContainer).hide().click(addCommentToSong);
+                commentsContainer.appendTo(songContainer);
+                songContainer.appendTo($('#showSongs'));
             }
+        }
+
+        function showSongComments(comments, selector) {
+            $.each(comments, function (key) {
+                $.each(comments[key], function (key, value) {
+                    $('<div class="comment">').text(key + ' said ' + "'" + value + "'").appendTo(selector)
+                })
+            })
         }
 
         function uploadSong(ext) {
@@ -146,7 +167,7 @@
             $.ajax({
                 method: 'PUT',
                 url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
-                headers:headers,
+                headers: headers,
                 data: JSON.stringify({
                     "forDelete": true
                 }),
@@ -195,6 +216,28 @@
                 }
             });
         }
+
+        function addCommentToSong() {
+            var user = localStorage.user;
+            var comment = $(this).prev().val();
+            var obj = {};
+            obj[user] = comment;
+            var song = $(this).attr('song-id');
+            $.ajax({
+                method: "PUT",
+                headers: headers,
+                url: "https://api.parse.com/1/classes/SongsStorage/" + song,
+                data: JSON.stringify({"comments": {"__op": "AddUnique", "objects": [obj]}}),
+                success: function (data) {
+                    $('.submit').hide();
+                    loadSongs(data);
+                },
+                error: function () {
+                    console.log("not OK");
+                }
+            });
+        }
+
 
         function deleteSongObject(song) {
 
