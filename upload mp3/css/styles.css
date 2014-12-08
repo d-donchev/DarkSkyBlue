@@ -1,6 +1,9 @@
-#showSongs {
+#songs-container{
 	padding: 5px;
-	border: 1px solid black;
+	border: 1px solid mediumseagreen;
+    border-radius: 10px;
+    margin:5px;
+    /*background-color: cadetblue;*/
 }
 
 #fileselect, #playlist-name, #create ,.add-to-playlist-button     {
@@ -17,6 +20,7 @@
     text-decoration: none;
     margin: 5px;
     color:mediumseagreen;
+    padding: 2px;
 }
 .comment{
     border: 1px solid;
@@ -32,5 +36,10 @@ a{
     text-decoration: none;
     display: inline-block;
     margin: 5px;
-
+}
+#playlists-container{
+    padding: 5px;
+    border: 1px solid cadetblue;
+    border-radius: 10px;
+    margin:5px;
 }

@@ -3,7 +3,6 @@ var application = application || {};
 application.dataOperator = (function () {
     function Operator(rootUrl) {
         this.song = new Song(rootUrl);
-        this.songComment = new SongComment(rootUrl);
         this.genre = new Genre(rootUrl);
         this.playlist = new Playlist(rootUrl);
     }
@@ -37,6 +36,10 @@ application.dataOperator = (function () {
             return ajaxRequester.delete(this.rootUrl + targetUrl + songId);
         };
 
+        Song.prototype.addComment = function(targetUrl, songId, commentData){
+            return ajaxRequester.put(this.rootUrl + targetUrl + songId, commentData)
+        };
+
         return Song;
     }());
 
@@ -52,18 +55,6 @@ application.dataOperator = (function () {
         return Genre;
     }());
 
-    var SongComment = (function(){
-        function SongComment(rootUrl){
-            this.rootUrl = rootUrl;
-        }
-
-        SongComment.prototype.addComment = function(targetUrl, songId, commentData){
-            return ajaxRequester.put(this.rootUrl + targetUrl + songId, commentData)
-        };
-
-        return SongComment;
-    }());
-
     var Playlist = (function(){
         function Playlist(rootUrl){
             this.rootUrl = rootUrl;
@@ -77,8 +68,8 @@ application.dataOperator = (function () {
           return ajaxRequester.post(this.rootUrl + targetUrl, playlistData);
         };
 
-        Playlist.prototype.addComment = function(){
-            //todo
+        Playlist.prototype.addComment = function(targetUrl, playlistId, commentData){
+            return ajaxRequester.put(this.rootUrl + targetUrl + playlistId, commentData)
         };
 
         return Playlist;

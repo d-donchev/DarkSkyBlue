@@ -112,9 +112,8 @@ application.controller = function () {
         var commentData = JSON.stringify({
             "comments": {"__op": "AddUnique", "objects": [obj]}
         });
-        _this.operator.songComment.addComment(_this.songsUrl, songId, commentData)
+        _this.operator.song.addComment(_this.songsUrl, songId, commentData)
             .then(function () {
-                $('.submit').hide();
                 _this.loadSongs();
             })
             .fail(function () {
@@ -175,11 +174,15 @@ application.controller = function () {
             .then(function (data) {
                 var playlistsContainer = $('#playlists-container');
                 $('<div id="playlist-header">').text('Playlists').appendTo(playlistsContainer);
-                $.each(data.results, function(_, song){
-                    if(song.playlistName){
+                $.each(data.results, function (_, song) {
+                    if (song.playlistName) {
                         $('<div>').addClass('playlist-name').text(song.playlistName).appendTo(playlistsContainer);
-                       $('<div>').addClass('song').append($('<a>').attr('href', song['song'].url).text(song.songName)).appendTo(playlistsContainer)
+                        var songContainer = $('<div>').addClass('song').append($('<a>').attr('href', song['song'].url).text(song.songName)).appendTo(playlistsContainer);
                     }
+                    $('<div>').addClass('playlist-comments-container').appendTo(songContainer);
+                    $('<button>').addClass('add-playlist-comment').text('Add Comment').appendTo(songContainer);
+                    $('<textarea>').addClass('playlist-comment-content').appendTo(songContainer).hide();
+                    $('<button>').addClass('submit-playlist-comment').data('playlist', song.playlist).text('Add').appendTo(songContainer).hide();
                 })
             })
             .fail(function () {
@@ -187,13 +190,34 @@ application.controller = function () {
             })
     };
 
-    Controller.prototype.addCommentToPlaylist = function () {
-        //todo
+    Controller.prototype.addCommentToPlaylist = function (playlistId, comment) {
+        var _this = this;
+        var user = localStorage.getObject('user');
+        var userName = user.firstName;
+        var obj = {};
+        obj[userName] = comment;
+        var commentData = JSON.stringify({
+            "comments": {"__op": "AddUnique", "objects": [obj]}
+        });
+        _this.operator.playlist.addComment(_this.playlistsUrl, playlistId, commentData)
+            .then(function (data) {
+                $('.current').html('');
+                $.each(data.comments, function (_, value) {
+                    $.each(value, function (user, comment) {
+                        $('<div>').text(user + ' said ' + "'" + comment + "'").appendTo($('.current'))
+                    })
+                });
+                $('.playlist-comments-container').removeClass('current');
+            })
+            .fail(function () {
+                showMessage('Cannot add comment', 'error');
+            })
     };
 
     Controller.prototype.addEventHandlers = function () {
         var _this = this;
-        var eventWrapper = $('#showSongs');
+        var eventWrapperSongs = $('#songs-container');
+        var eventWrapperPlaylists = $('#playlists-container');
 
         // add song
         $('#fileselect').change(function () {
@@ -225,20 +249,22 @@ application.controller = function () {
         });
 
         // delete song
-        eventWrapper.on('click', '.delete-song-button', function () {
+        eventWrapperSongs.on('click', '.delete-song-button', function () {
             var song = $(this).data('song');
             _this.deleteSong(song);
         });
 
         // add comment to song
-        eventWrapper.on('click', '.load-text-area', function () {
+        eventWrapperSongs.on('click', '.load-text-area', function () {
             $(this).next().fadeIn('slow');
             $(this).next().next().fadeIn('slow');
         });
-        eventWrapper.on('click', '.submit', function () {
+        eventWrapperSongs.on('click', '.submit', function () {
             var songId = $(this).attr('song-id');
             var comment = $(this).prev().val();
             _this.addCommentToSong(songId, comment);
+            $(this).fadeOut('slow');
+            $(this).prev().fadeOut('slow');
         });
 
         // create playlist
@@ -263,12 +289,11 @@ application.controller = function () {
         });
 
         // add song to playlist
-        eventWrapper.on('change', '.select-playlist', function () {
+        eventWrapperSongs.on('change', '.select-playlist', function () {
             $(this).next().fadeIn('slow');
-
         });
 
-        eventWrapper.on('click', '.add-to-playlist-button', function () {
+        eventWrapperSongs.on('click', '.add-to-playlist-button', function () {
             var playlist = $(this).prev().find('option:selected').data('playlist');
             var song = $(this).data('song');
             var playlistData = JSON.stringify({
@@ -284,17 +309,31 @@ application.controller = function () {
             $(this).fadeOut();
         });
 
-        // show playlists
-
+        // show playlists with songs
         $('#show-playlists').click(function () {
             _this.loadPlaylistSongs();
+        });
+
+        // add comment to playlist
+        eventWrapperPlaylists.on('click', '.add-playlist-comment', function () {
+            $(this).next().fadeIn('slow');
+            $(this).next().next().fadeIn('slow');
+        });
+
+        eventWrapperPlaylists.on('click', '.submit-playlist-comment', function () {
+            var playlist = $(this).data('playlist');
+            var comment = $(this).prev().val();
+            _this.addCommentToPlaylist(playlist.objectId, comment);
+            $(this).fadeOut('slow');
+            $(this).prev().fadeOut('slow');
+            $(this).prev().prev().prev().addClass('current');
         })
     };
 
     Controller.prototype.showSongs = function (songs) {
         var _this = this;
         $('#uploadbutton').attr('disabled', "disabled");
-        $('#showSongs').html("");
+        $('#songs-container').html("");
         for (var s in songs.results) {
             var songObj = songs.results[s]['song'];
             var song = songs.results[s];
@@ -318,7 +357,7 @@ application.controller = function () {
             $('<textarea>').addClass('comment-content').attr('song-id', song.objectId).appendTo(commentsContainer).hide();
             $('<button>').addClass('submit').attr('song-id', song.objectId).text('Add').appendTo(commentsContainer).hide();
             commentsContainer.appendTo(songContainer);
-            songContainer.appendTo($('#showSongs'));
+            songContainer.appendTo($('#songs-container'));
         }
         _this.loadPlaylists();
     };
