@@ -3,7 +3,7 @@
 	border: 1px solid black;
 }
 
-#fileselect, #playlist-name, #create ,.add-to-playlist-button  {
+#fileselect, #playlist-name, #create ,.add-to-playlist-button     {
 	display: none ;
 }
 
@@ -16,9 +16,21 @@
     background-color: lightgrey;
     text-decoration: none;
     margin: 5px;
-    color:black;
+    color:mediumseagreen;
 }
 .comment{
     border: 1px solid;
     height: 30px;
+}
+.playlist-name{
+    font-style: italic;
+}
+#playlist-header{
+    font-size: 20px;
+}
+a{
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px;
+
 }

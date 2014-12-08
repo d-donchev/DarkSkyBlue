@@ -12,6 +12,7 @@
 	<div id="genres-container"></div>
 
 	<select id='songGenre'>
+		<option disabled selected>Choose Genre</option>
 		<option>Rock</option>
 		<option>House</option>
 	</select>
@@ -19,11 +20,11 @@
     <button id='btn-upload'>Choose File</button>
     <input id="uploadbutton" type="button" value="Upload"/>
     <div id="progress-wrapper"><div id="prog"></div></div>
-    <button id="test">Print on console SongStorage with function call -> Could Code https://api.parse.com/1/functions/show</button>
     <div id="playlists-container">
         <button id="create-playlist">Create Playlist</button>
         <input type="text" id="playlist-name" placeholder="Playlist name"/>
         <button id="create" disabled>Create</button>
+        <button id="show-playlists">Show Playlists</button>
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
