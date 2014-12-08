@@ -69,6 +69,14 @@ application.dataOperator = (function () {
             this.rootUrl = rootUrl;
         }
 
+        Playlist.prototype.getAllPlaylists = function(targetUrl){
+           return ajaxRequester.get(this.rootUrl + targetUrl)
+        };
+
+        Playlist.prototype.addPlaylist = function(targetUrl, playlistData){
+          return ajaxRequester.post(this.rootUrl + targetUrl, playlistData);
+        };
+
         Playlist.prototype.addComment = function(){
             //todo
         };

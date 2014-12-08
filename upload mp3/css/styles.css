@@ -3,7 +3,7 @@
 	border: 1px solid black;
 }
 
-#fileselect  {
+#fileselect, #playlist-name, #create ,.add-to-playlist-button  {
 	display: none ;
 }
 

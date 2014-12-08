@@ -4,4 +4,5 @@
     var controller = application.controller.get(operator);
     controller.loadSongs();
     controller.loadGenres();
+    //controller.loadPlaylists();
 }());

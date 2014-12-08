@@ -11,6 +11,7 @@ application.controller = function () {
         this.operator = dataOperator;
         this.songsUrl = 'classes/SongsStorage/';
         this.genresUrl = 'classes/songGenre/';
+        this.playlistsUrl = 'classes/Playlist/';
         this.filesUrl = 'files/';
         this.functionsUrl = 'functions/';
         this.addEventHandlers();
@@ -20,7 +21,7 @@ application.controller = function () {
         var _this = this;
         _this.operator.song.getAllSongs(_this.songsUrl)
             .then(function (data) {
-                showSongs(data);
+                _this.showSongs(data);
             })
             .fail(function () {
                 showMessage('Cannot load songs', 'error');
@@ -56,8 +57,8 @@ application.controller = function () {
                         $("<div>").attr('id', 'prog').appendTo($("#progress-wrapper"));
                         showMessage('Song successfully uploaded', 'success');
                         _this.operator.song.getAllSongs(_this.songsUrl)
-                            .then(function (data) {
-                                showSongs(data);
+                            .then(function (songs) {
+                                _this.showSongs(songs);
                             })
                     })
             })
@@ -92,7 +93,7 @@ application.controller = function () {
             .then(function () {
                 _this.operator.song.getAllSongs(_this.songsUrl)
                     .then(function (data) {
-                        showSongs(data);
+                        _this.showSongs(data);
                     })
             })
             .fail(function () {
@@ -121,20 +122,54 @@ application.controller = function () {
             })
     };
 
-    Controller.prototype.loadGenres = function(){
+    Controller.prototype.loadGenres = function () {
         var _this = this;
         _this.operator.genre.getAllGenres(_this.genresUrl)
-            .then(function(data){
-                showGenres(data);
+            .then(function (genres) {
+                $.each(genres.results, function (key, value) {
+                    $('<div>').addClass('comment').text(value.genre).appendTo('#genres-container')
+                })
             })
-
     };
 
-    Controller.prototype.createPlaylist = function(){
-        //todo
+    Controller.prototype.createPlaylist = function (playlistData) {
+        var _this = this;
+        _this.operator.playlist.addPlaylist(_this.playlistsUrl, playlistData)
+            .then(function () {
+                showMessage('Playlist successfully created', 'success');
+                _this.loadSongs();
+            })
+            .fail(function () {
+                showMessage('Cannot create playlist', 'error');
+            })
     };
 
-    Controller.prototype.addCommentToPlaylist = function(){
+    Controller.prototype.addSongToPlaylist = function (songId, playlistData) {
+        var _this = this;
+        _this.operator.song.editSong(this.songsUrl, songId, playlistData)
+            .then(function () {
+                showMessage('Song added to playlist successfully', 'success');
+            })
+            .fail(function () {
+                showMessage('Cannot add song to playlist', 'error');
+            })
+    };
+
+    Controller.prototype.loadPlaylists = function () {
+        var _this = this;
+        _this.operator.playlist.getAllPlaylists(_this.playlistsUrl)
+            .then(function (playlists) {
+                var select = $('.select-playlist');
+                $.each(playlists.results, function (key, value) {
+                    $('<option>').data('playlist', value).text(value.name).appendTo(select);
+                })
+            })
+            .fail(function () {
+                showMessage('Cannot load playlists', 'error');
+            })
+    };
+
+    Controller.prototype.addCommentToPlaylist = function () {
         //todo
     };
 
@@ -179,37 +214,80 @@ application.controller = function () {
 
         // add comment to song
         eventWrapper.on('click', '.load-text-area', function () {
-            $(this).next().show();
-            $(this).next().next().show();
+            $(this).next().fadeIn('slow');
+            $(this).next().next().fadeIn('slow');
         });
         eventWrapper.on('click', '.submit', function () {
             var songId = $(this).attr('song-id');
             var comment = $(this).prev().val();
             _this.addCommentToSong(songId, comment);
         });
+
+        // create playlist
+        var loadPlaylistName = $('#create-playlist');
+        var playlistNameField = $('#playlist-name');
+        var createButton = $('#create');
+        loadPlaylistName.click(function () {
+            playlistNameField.fadeIn('slow');
+            createButton.fadeIn('slow');
+        });
+
+        playlistNameField.change(function () {
+            createButton.removeAttr('disabled')
+        });
+
+        createButton.click(function () {
+            var playListName = $(this).prev().val();
+            var playlistData = JSON.stringify({
+                'name': playListName
+            });
+            _this.createPlaylist(playlistData);
+        });
+
+        // add song to playlist
+        eventWrapper.on('change', '.select-playlist', function () {
+            $(this).next().fadeIn('slow');
+
+        });
+
+        eventWrapper.on('click', '.add-to-playlist-button', function(){
+            var playlistName = $(this).prev().find('option:selected').text();
+            var playlist = $(this).prev().find('option:selected').data('playlist');
+            var song = $(this).data('song');
+            var playlistData = JSON.stringify({
+                "playlist": {
+                    "name": playlistName,
+                    "__type": "Pointer",
+                    "className": "Playlist",
+                    "objectId": playlist.objectId
+                }
+            });
+
+            _this.addSongToPlaylist(song.objectId, playlistData);
+        })
     };
 
-
-    function showSongs(data) {
+    Controller.prototype.showSongs = function (songs) {
+        var _this = this;
         $('#uploadbutton').attr('disabled', "disabled");
         $('#showSongs').html("");
-        for (var s in data.results) {
-            var songObj = data.results[s]['song'];
-            var song = data.results[s];
+        for (var s in songs.results) {
+            var songObj = songs.results[s]['song'];
+            var song = songs.results[s];
             var songUrl = songObj.url;
-            var songName = data.results[s].songName;
+            var songName = songs.results[s].songName;
             var songContainer = $('<div>').addClass("displayedSongs");
-            var link = $('<a>').attr("href", songUrl);
-            var $delete = $('<button>').addClass("delete-song-button").text("Delete");
-            $delete.data('song', song);
-            $delete.appendTo(songContainer);
+            $('<a>').attr("href", songUrl).text(songName).appendTo(songContainer);
+            $('<button>').addClass("delete-song-button").data('song', song).text("Delete").appendTo(songContainer);
             $('<a>').addClass('download-button').attr('href', songUrl).attr('download', songName).text('Download').appendTo(songContainer);
-            link.text(songName);
-            link.appendTo(songContainer);
+            var select = $('<select>').addClass('select-playlist').data('song', song).text('Add To Playlist').appendTo(songContainer);
+            $('<option>').text('Add To Playlist').attr('disabled', 'disabled').appendTo(select);
+            $('<button>').addClass('add-to-playlist-button').data('song', song).text('Add').appendTo(songContainer);
+
             var commentsContainer = $('<div>').addClass('comments');
             var commentsList = $('<div>').addClass('comments-list').attr('song-id', song.objectId).appendTo(commentsContainer);
-            var comments = data.results[s].comments;
-            if (data.results[s].comments) {
+            var comments = songs.results[s].comments;
+            if (songs.results[s].comments) {
                 showSongComments(comments, commentsList)
             }
             $('<button>').addClass('load-text-area').attr('song-id', song.objectId).text('Add comment').appendTo(commentsContainer);
@@ -218,19 +296,14 @@ application.controller = function () {
             commentsContainer.appendTo(songContainer);
             songContainer.appendTo($('#showSongs'));
         }
-    }
+        _this.loadPlaylists();
+    };
 
     function showSongComments(comments, selector) {
         $.each(comments, function (key) {
             $.each(comments[key], function (key, value) {
                 $('<div>').addClass('comment').text(key + ' said ' + "'" + value + "'").appendTo(selector)
             })
-        })
-    }
-
-    function showGenres(genres){
-        $.each(genres.results, function(key, value){
-            $('<div>').addClass('comment').text(value.genre).appendTo('#genres-container')
         })
     }
 
