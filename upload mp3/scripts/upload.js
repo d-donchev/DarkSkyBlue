@@ -2,6 +2,7 @@
     Storage.prototype.getObject = function getObject(key) {
         return JSON.parse(this.getItem(key));
     };
+
     $(document).ready(function () {
         var file;
         var headers = {
@@ -70,7 +71,7 @@
                 link.appendTo(songContainer);
 
                 var commentsContainer = $('<div>').addClass('comments');
-                var commentsList = $('<div class="comment-list">').appendTo(commentsContainer);
+                var commentsList = $('<div class="comments-list">').attr('song-id', song.objectId).appendTo(commentsContainer);
                 var comments = data.results[s].comments;
                 if (data.results[s].comments) {
                     showSongComments(comments, commentsList)
@@ -190,18 +191,6 @@
             alert("deleteFileSuccessfully");
         }
 
-        function deleteObject(songId) {
-            console.log(songId);
-        }
-
-        function songUploaded() {
-            console.log("uploaded");
-        }
-
-        function songsUploadedError() {
-            console.log("Error");
-        }
-
         function songsLoadedError(e) {
             console.log(e);
         }
@@ -234,19 +223,15 @@
                 data: JSON.stringify({"comments": {"__op": "AddUnique", "objects": [obj]}}),
                 success: function (data) {
                     $('.submit').hide();
-                    loadSongs();
+                    $('div[song-id = "'+song+'"]').hide();
+                    showSongComments(data.comments, $('div[song-id = "'+song+'"]'));
+                    $('div[song-id = "'+song+'"]').show();
                 },
                 error: function () {
                     console.log("not OK");
                 }
             });
         }
-
-        function addSongCommentToDom(data){
-
-        }
-
-
 
         function deleteSongObject(song) {
 

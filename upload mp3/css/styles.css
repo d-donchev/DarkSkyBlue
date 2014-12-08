@@ -10,7 +10,7 @@
 #uploadButton {
 	disabled: disabled;
 }
-#download-button {
+.download-button {
     display: inline-block;
     border: 1px solid;
     background-color: lightgrey;
