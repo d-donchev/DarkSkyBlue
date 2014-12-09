@@ -1,8 +1,4 @@
 (function () {
-    Storage.prototype.getObject = function getObject(key) {
-        return JSON.parse(this.getItem(key));
-    };
-
     $(document).ready(function () {
         var file;
         var headers = {
@@ -35,6 +31,7 @@
                 files = e.target.files || e.dataTransfer.files;
                 // Our file var now holds the selected file
                 file = files[0];
+
             });
         });
 
@@ -60,39 +57,18 @@
                 var song = data.results[s];
                 var songUrl = songObj.url;
                 var songName = data.results[s].songName;
-                var songContainer = $('<div>').addClass("dipslayedSongs");
+                var div = $('<div>').addClass("dipslayedSongs");
                 var link = $('<a>').attr("href", songUrl);
                 var $delete = $('<button>').addClass("delete-btn").text("Delete");
                 $delete.data('song', song);
-                $delete.appendTo(songContainer);
+                $delete.appendTo(div);
                 $delete.click(deleteSong);
-                $('<a id="download-button">').attr('href', songUrl).attr('download', songName).text('Download').appendTo(songContainer);
+                var download = $('<a id="dw-btn">').attr('href',songUrl).attr('download', songName).text('Download');
+                download.appendTo(div);
                 link.text(songName);
-                link.appendTo(songContainer);
-
-                var commentsContainer = $('<div>').addClass('comments');
-                var commentsList = $('<div class="comments-list">').attr('song-id', song.objectId).appendTo(commentsContainer);
-                var comments = data.results[s].comments;
-                if (data.results[s].comments) {
-                    showSongComments(comments, commentsList)
-                }
-                $('<button class="submit" id="add-comment">').attr('song-id', song.objectId).text('Add comment').click(function () {
-                    $(this).next().show();
-                    $(this).next().next().show();
-                }).appendTo(commentsContainer);
-                $('<textarea class="submit" id="comment-content">').attr('song-id', song.objectId).appendTo(commentsContainer).hide();
-                $('<button class="submit">').attr('song-id', song.objectId).text('Add').appendTo(commentsContainer).hide().click(addCommentToSong);
-                commentsContainer.appendTo(songContainer);
-                songContainer.appendTo($('#showSongs'));
+                link.appendTo(div);
+                div.appendTo($('#showSongs'));
             }
-        }
-
-        function showSongComments(comments, selector) {
-            $.each(comments, function (key) {
-                $.each(comments[key], function (key, value) {
-                    $('<div class="comment">').text(key + ' said ' + "'" + value + "'").appendTo(selector)
-                })
-            })
         }
 
         function uploadSong(ext) {
@@ -171,7 +147,6 @@
             $.ajax({
                 method: 'PUT',
                 url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
-                headers: headers,
                 data: JSON.stringify({
                     "forDelete": true
                 }),
@@ -181,6 +156,7 @@
                     callParseCloudCodeForDelete();
                     deleteSongObject(song);
                     deleteFileSuccessfully();
+
                 },
 
                 error: songsLoadedError
@@ -191,6 +167,18 @@
             alert("deleteFileSuccessfully");
         }
 
+        function deleteObject(songId) {
+            console.log(songId);
+        }
+
+        function songUploaded() {
+            console.log("uploaded");
+        }
+
+        function songsUploadedError() {
+            console.log("Error");
+        }
+
         function songsLoadedError(e) {
             console.log(e);
         }
@@ -198,34 +186,13 @@
         function callParseCloudCodeForDelete() {
             $.ajax({
                 method: "POST",
-                headers: headers,
+                headers: {
+                    "X-Parse-Application-Id": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS",
+                    "X-Parse-REST-API-Key": "hSiN54s0we68AaQaQJCauFXNfE4w8J3nPppcRyPE"
+                },
                 url: "https://api.parse.com/1/functions/delete",
                 success: function (data) {
                     console.log(data);
-                },
-                error: function () {
-                    console.log("not OK");
-                }
-            });
-        }
-
-        function addCommentToSong() {
-            var user = localStorage.getObject('user');
-            var userName = user.firstName;
-            var comment = $(this).prev().val();
-            var obj = {};
-            obj[userName] = comment;
-            var song = $(this).attr('song-id');
-            $.ajax({
-                method: "PUT",
-                headers: headers,
-                url: "https://api.parse.com/1/classes/SongsStorage/" + song,
-                data: JSON.stringify({"comments": {"__op": "AddUnique", "objects": [obj]}}),
-                success: function (data) {
-                    $('.submit').hide();
-                    $('div[song-id = "'+song+'"]').hide();
-                    showSongComments(data.comments, $('div[song-id = "'+song+'"]'));
-                    $('div[song-id = "'+song+'"]').show();
                 },
                 error: function () {
                     console.log("not OK");
@@ -239,7 +206,10 @@
             $.ajax({
 
                 method: "DELETE",
-                headers: headers,
+                headers: {
+                    "X-Parse-Application-Id": "LlxgjVpQeDR5hNQwUeurn7FvwDsJ5asIediNz4gS",
+                    "X-Parse-REST-API-Key": "hSiN54s0we68AaQaQJCauFXNfE4w8J3nPppcRyPE"
+                },
                 url: "https://api.parse.com/1/classes/SongsStorage/" + song.objectId,
                 success: function (data) {
                     console.log(data);

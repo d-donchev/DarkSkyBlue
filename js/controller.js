@@ -63,7 +63,7 @@ application.controller = function () {
                     })
             })
             .fail(function () {
-                showMessage('Cannot upload song', 'error');
+                showMessage('Cannot upload song file', 'error');
             })
             .progress(function (e) {
                 if (e.lengthComputable) {
@@ -126,7 +126,7 @@ application.controller = function () {
         _this.operator.genre.getAllGenres(_this.genresUrl)
             .then(function (genres) {
                 $.each(genres.results, function (_, value) {
-                    $('<div>').addClass('comment').text(value.genre).appendTo('#genres-container')
+                    $('<div>').addClass('genre').text(value.genre).appendTo('#genres-container')
                 })
             })
     };
@@ -173,16 +173,16 @@ application.controller = function () {
         _this.operator.song.getAllSongs(_this.songsUrl)
             .then(function (data) {
                 var playlistsContainer = $('#playlists-container');
-                $('<div id="playlist-header">').text('Playlists').appendTo(playlistsContainer);
                 $.each(data.results, function (_, song) {
                     if (song.playlistName) {
-                        $('<div>').addClass('playlist-name').text(song.playlistName).appendTo(playlistsContainer);
-                        var songContainer = $('<div>').addClass('song').append($('<a>').attr('href', song['song'].url).text(song.songName)).appendTo(playlistsContainer);
+                        var playlistWrapper = $('<div>').addClass('playlist-wrapper').appendTo(playlistsContainer);
+                        $('<div>').addClass('playlist-name').text(song.playlistName).appendTo(playlistWrapper);
+                        $('<div>').addClass('song').append($('<a>').attr('href', song['song'].url).text(song.songName)).appendTo(playlistWrapper);
+                        $('<div>').addClass('playlist-comments-container').appendTo(playlistWrapper);
+                        $('<button>').addClass('add-playlist-comment').text('Add Comment').appendTo(playlistWrapper);
+                        $('<textarea>').addClass('playlist-comment-content').appendTo(playlistWrapper).hide();
+                        $('<button>').addClass('submit-playlist-comment').data('playlist', song.playlist).text('Add').appendTo(playlistWrapper).hide();
                     }
-                    $('<div>').addClass('playlist-comments-container').appendTo(songContainer);
-                    $('<button>').addClass('add-playlist-comment').text('Add Comment').appendTo(songContainer);
-                    $('<textarea>').addClass('playlist-comment-content').appendTo(songContainer).hide();
-                    $('<button>').addClass('submit-playlist-comment').data('playlist', song.playlist).text('Add').appendTo(songContainer).hide();
                 })
             })
             .fail(function () {
@@ -221,7 +221,7 @@ application.controller = function () {
 
         // add song
         $('#fileselect').change(function () {
-            var extension = this.value.match(/\.(.+)$/)[1];
+            var extension = this.value.substr(this.value.length - 3);
             switch (extension) {
                 case 'mp3':
                 case 'wav':
@@ -233,7 +233,7 @@ application.controller = function () {
                     break;
                 default:
                     $('#uploadbutton').attr('disabled', "disabled");
-                    alert('This is not an allowed file type.');
+                    showMessage('File type not allowed', 'error');
                     $(this).value = '';
             }
         });
@@ -261,7 +261,7 @@ application.controller = function () {
         });
         eventWrapperSongs.on('click', '.submit', function () {
             var songId = $(this).attr('song-id');
-            var comment = $(this).prev().val();
+            var comment = htmlEntities($(this).prev().val());
             _this.addCommentToSong(songId, comment);
             $(this).fadeOut('slow');
             $(this).prev().fadeOut('slow');
@@ -281,7 +281,7 @@ application.controller = function () {
         });
 
         createButton.click(function () {
-            var playListName = $(this).prev().val();
+            var playListName = htmlEntities($(this).prev().val());
             var playlistData = JSON.stringify({
                 'name': playListName
             });
@@ -322,7 +322,7 @@ application.controller = function () {
 
         eventWrapperPlaylists.on('click', '.submit-playlist-comment', function () {
             var playlist = $(this).data('playlist');
-            var comment = $(this).prev().val();
+            var comment = htmlEntities($(this).prev().val());
             _this.addCommentToPlaylist(playlist.objectId, comment);
             $(this).fadeOut('slow');
             $(this).prev().fadeOut('slow');
@@ -368,6 +368,10 @@ application.controller = function () {
                 $('<div>').addClass('comment').text(key + ' said ' + "'" + value + "'").appendTo(selector)
             })
         })
+    }
+
+    function htmlEntities(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function showMessage(message, type) {

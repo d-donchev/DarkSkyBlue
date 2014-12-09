@@ -1,9 +1,10 @@
-#songs-container{
+#songs-container, #genres-container{
 	padding: 5px;
 	border: 1px solid mediumseagreen;
-    border-radius: 10px;
+    border-radius: 5px;
     margin:5px;
-    /*background-color: cadetblue;*/
+    background-color: cadetblue;
+    width:50%;
 }
 
 #fileselect, #playlist-name, #create ,.add-to-playlist-button     {
@@ -23,8 +24,9 @@
     padding: 2px;
 }
 .comment{
-    border: 1px solid;
-    height: 30px;
+    border: 1px solid #2c3e50;
+    margin:2px;
+    border-radius: 2px;
 }
 .playlist-name{
     font-style: italic;
@@ -36,10 +38,40 @@ a{
     text-decoration: none;
     display: inline-block;
     margin: 5px;
+    color: orange;
+    font-weight: bold;
+    font-family: Calibri, sans-serif;
 }
 #playlists-container{
     padding: 5px;
     border: 1px solid cadetblue;
-    border-radius: 10px;
+    border-radius: 5px;
     margin:5px;
+    margin-left: 10px;
+    background-color: #18BC9C;
+    width: 46%;
+    position: absolute;
+    top:2px;
+    left:700px;
+}
+button:hover{
+    cursor: pointer;
+}
+.displayedSongs, .genre{
+    border:3px solid #2C3E50;
+    width: 90%;
+    margin: 5px;
+    border-radius: 5px;
+    margin-left: 25px;
+}
+
+#progress-container{
+    background-color: orange;
+    border-radius: 5px;
+    padding: 5px;
+    width:50%;
+    margin:5px;
+}
+.genre{
+    padding: 5px;
 }

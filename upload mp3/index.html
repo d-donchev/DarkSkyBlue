@@ -1,39 +1,46 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Upload mp3</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css" />
-	<link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <title>Upload mp3</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/black-tie/jquery-ui.css"/>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-	<div id="songs-container"></div>
-	<div id="genres-container"></div>
+<div id="wrapper">
+    <div id="songs-container"></div>
+    <div id="genres-container"></div>
+    <div id="progress-container">
+        <select id='songGenre'>
+            <option disabled selected>Choose Genre</option>
+            <option>Rock</option>
+            <option>House</option>
+        </select>
+        <input type="file" name="fileselect" id="fileselect">
+        <button id='btn-upload'>Choose File</button>
+        <input id="uploadbutton" type="button" value="Upload"/>
 
-	<select id='songGenre'>
-		<option disabled selected>Choose Genre</option>
-		<option>Rock</option>
-		<option>House</option>
-	</select>
-    <input type="file" name="fileselect" id="fileselect">
-    <button id='btn-upload'>Choose File</button>
-    <input id="uploadbutton" type="button" value="Upload"/>
-    <div id="progress-wrapper"><div id="prog"></div></div>
+        <div id="progress-wrapper">
+            <div id="prog"></div>
+        </div>
+    </div>
     <div id="playlists-container">
         <button id="create-playlist">Create Playlist</button>
         <input type="text" id="playlist-name" placeholder="Playlist name"/>
         <button id="create" disabled>Create</button>
         <button id="show-playlists">Show Playlists</button>
     </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
-    <script src="../js/ajax-requester.js"></script>
-    <script src="../js/data-operator.js"></script>
-    <script src="../js/controller.js"></script>
-    <script src="../js/main.js"></script>
-    <script src="../js/progress.js"></script>
-    <script src="../js/libs/jquery.noty.packaged.min.js"></script>
+</div>
+
+<script src="../js/libs/jquery-2.1.1.min.js"></script>
+<script src="../js/libs/jquery-ui.min.js"></script>
+<script src="../js/ajax-requester.js"></script>
+<script src="../js/data-operator.js"></script>
+<script src="../js/controller.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/progress.js"></script>
+<script src="../js/libs/jquery.noty.packaged.min.js"></script>
 
 </body>
 </html>
